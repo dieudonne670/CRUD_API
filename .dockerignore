@@ -1,0 +1,31 @@
+# Env / secrets
+.env
+.env.*
+!.env.example
+
+# Python
+env/
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+
+# Git
+.git/
+.gitignore
+
+# Tests (not needed in the runtime image)
+tests/
+
+# Frontend (built/deployed separately)
+react/
+
+# Local data
+uploads/
+*.log
+
+# Docs / misc
+README.md
+nginx/

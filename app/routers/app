@@ -1,0 +1,114 @@
+from sqlalchemy.orm import Session
+from app import models
+
+def create_notification(
+    db: Session,
+    recipient_id: int,
+    actor_id: int,
+    notification_type: str,
+    post_id: int = None,
+    comment_id: int = None,
+):
+    # Don't notify yourself
+    if recipient_id == actor_id:
+        return
+
+    notification = models.Notification(
+        recipient_id=recipient_id,
+        actor_id=actor_id,
+        type=notification_type,
+        post_id=post_id,
+        comment_id=comment_id,
+    )
+
+    db.add(notification)
+    db.commit()
+
+    return notification
+
+
+def create_notification_for_comment(
+    db: Session,
+    comment_id: int,
+    actor_id: int,
+):
+    comment = db.query(models.Comment).filter(models.Comment.id == comment_id).first()
+    if not comment:
+        return
+
+    create_notification(
+        db=db,
+        recipient_id=comment.owner_id,
+        actor_id=actor_id,
+        notification_type="comment",
+        comment_id=comment_id,
+    )
+
+def create_notification_for_like(
+    db: Session,
+    post_id: int,
+    actor_id: int,
+):
+    post = db.query(models.Post).filter(models.Post.id == post_id).first()
+    if not post:
+        return
+
+    create_notification(
+        db=db,
+        recipient_id=post.owner_id,
+        actor_id=actor_id,
+        notification_type="like",
+        post_id=post_id,
+    )
+
+def create_notification_for_follow(
+    db: Session,
+    following_id: int,
+    actor_id: int,
+):
+    create_notification(
+        db=db,
+        recipient_id=following_id,
+        actor_id=actor_id,
+        notification_type="follow",
+    )
+
+def create_notification_for_comment(db: Session, comment_id: int, actor_id: int):
+    comment = db.query(models.Comment).filter(models.Comment.id == comment_id).first()
+    if not comment:
+        return
+
+    create_notification(
+        db=db,
+        recipient_id=comment.owner_id,
+        actor_id=actor_id,
+        notification_type="comment",
+        comment_id=comment_id,
+    )
+
+def create_notification_for_like(db: Session, post_id: int, actor_id: int):
+    post = db.query(models.Post).filter(models.Post.id == post_id).first()
+    if not post:
+        return
+
+    create_notification(
+        db=db,
+        recipient_id=post.owner_id,
+        actor_id=actor_id,
+        notification_type="like",
+        post_id=post_id,
+    )
+
+def create_notification_for_reply(db: Session, comment_id: int, actor_id: int):
+    comment = db.query(models.Comment).filter(models.Comment.id == comment_id).first()
+    if not comment:
+        return
+
+    create_notification(
+        db=db,
+        recipient_id=comment.owner_id,
+        actor_id=actor_id,
+        notification_type="reply",
+        comment_id=comment_id,
+    )
+    

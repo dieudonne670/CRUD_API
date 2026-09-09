@@ -1,0 +1,36 @@
+# VCS / CI
+.git
+.gitignore
+.github
+.gitlab-ci.yml
+
+# Dependencies & build output
+node_modules
+dist
+dist-ssr
+.vite
+*.tsbuildinfo
+
+# Local env & secrets
+.env
+.env.local
+.env.*.local
+
+# Editors / OS
+.vscode
+.idea
+.DS_Store
+Thumbs.db
+*.swp
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs
+
+# Docs / infra not needed inside the image
+Dockerfile
+.dockerignore
+docker-compose*.yml
+README.md

@@ -1,0 +1,93 @@
+databases:
+  - name: crud-db
+    plan: free
+    databaseName: crud_db
+    user: crud_user
+
+services:
+  # ---- Redis (Celery broker / cache) ----
+  - type: keyvalue
+    name: crud-redis
+    plan: free
+    ipAllowList: []
+
+  # ---- FastAPI backend ----
+  - type: web
+    name: crud-api
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /
+    envVars:
+      - key: PORT
+        value: 8000
+
+      # --- Database (auto-wired from the "crud-db" service above) ---
+      - key: DATABASE_HOSTNAME
+        fromDatabase: { name: crud-db, property: host }
+      - key: DATABASE_PORT
+        fromDatabase: { name: crud-db, property: port }
+      - key: DATABASE_NAME
+        fromDatabase: { name: crud-db, property: database }
+      - key: DATABASE_USERNAME
+        fromDatabase: { name: crud-db, property: user }
+      - key: DATABASE_PASSWORD
+        fromDatabase: { name: crud-db, property: password }
+
+      # --- Redis (auto-wired from the "crud-redis" service above) ---
+      - key: REDIS_URL
+        fromService: { type: keyvalue, name: crud-redis, property: connectionString }
+
+      # --- Auth ---
+      - key: SECRET_KEY
+        generateValue: true          # Render generates a random value, never stored in the repo
+      - key: ALGORITHM
+        value: HS256
+      - key: ACCESS_TOKEN_EXPIRE_MINUTE
+        value: "3000"
+
+      # --- Email (set the real values in the Render dashboard, not here) ---
+      - key: EMAIL_HOST
+        value: smtp.gmail.com
+      - key: EMAIL_PORT
+        value: "587"
+      - key: EMAIL_USERNAME
+        sync: false
+      - key: EMAIL_PASSWORD
+        sync: false
+
+      # --- Cloudinary (set the real values in the Render dashboard) ---
+      - key: STORAGE_BACKEND
+        value: cloudinary
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+
+      # --- Elasticsearch (optional; only needed if you wire up an external
+      # ES instance such as Elastic Cloud's free tier. Leave unset to run
+      # without search — the app degrades gracefully). ---
+      - key: ELASTICSEARCH_HOST
+        sync: false
+      - key: ELASTICSEARCH_PORT
+        value: "9200"
+      - key: ELASTICSEARCH_SCHEME
+        value: https
+      - key: ELASTICSEARCH_USERNAME
+        sync: false
+      - key: ELASTICSEARCH_PASSWORD
+        sync: false
+      - key: ELASTICSEARCH_VERIFY_CERTS
+        value: "false"
+
+      # --- CORS: replace with your deployed frontend URL once you have it ---
+      - key: CORS_ORIGINS
+        value: "http://localhost:3000,http://localhost:5173"
+
+  # ---- Celery worker: not deployed yet ----
+  # Background jobs (thumbnail generation, video metadata, async emails)
+  # just enqueue to Redis and sit unprocessed without this. Fine for an
+  # initial deploy/demo. To add it back later, restore a `type: worker`
+  # service here with `dockerCommand: celery -A app.celery_app worker
+  # --loglevel=info` and the same env vars as crud-api above.
