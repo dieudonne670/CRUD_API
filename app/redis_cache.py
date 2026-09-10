@@ -9,10 +9,10 @@ from app.config import settings
 # Create Redis connection
 # --------------------------------------------------
 
-redis_cache = redis.Redis(
-    host=settings.redis_host,
-    port=settings.redis_port,
-    db=1,
+REDIS_URL = settings.redis_url or f"redis://{settings.redis_host}:{settings.redis_port}/1"
+
+redis_cache = redis.Redis.from_url(
+    REDIS_URL,
     decode_responses=True,
 )
 
