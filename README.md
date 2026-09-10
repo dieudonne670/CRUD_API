@@ -408,7 +408,7 @@ CRUD_cleaned/
 └── start.sh
 ⚙️ Local Development
 1. Clone the repository
-git clone https://github.com/dieudonne670/CRUD_APP.git
+git clone https://github.com/dieudonne670/CRUD_API.git
 cd CRUD_APP
 2. Create a virtual environment
 python3 -m venv env
