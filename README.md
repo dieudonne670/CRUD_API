@@ -8,6 +8,8 @@ The project focuses on backend API development, authentication, database managem
 
 * **Backend API:** https://crud-api-0b8d.onrender.com
 * **Frontend:** https://crud-api-1-s7wp.onrender.com
+* API Documentation:
+https://crud-api-0b8d.onrender.com/docs
 
 > The current production deployment runs the core web application on Render. Some infrastructure and experimental components in the repository are intended for future development and are not part of the current production deployment.
 
