@@ -166,7 +166,7 @@ The long-term vision is to turn this project into a **complete social media ecos
 
 **Dieudonne Kindong**
 
-Software Engineering | Backend Development | Python | FastAPI | Django | Cloud & DevOps
+Software Engineering | Backend Development | Python | FastAPI | Django 
 
 GitHub: `https://github.com/dieudonne670`
 
