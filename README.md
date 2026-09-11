@@ -42,14 +42,13 @@ The project focuses on backend API development, authentication, database managem
 * Authentication
 * User profiles
 * Posts and interactions
-* Comments, votes and bookmarks
-* Followers
+* likes, 
 * Stories
 * Messaging
 * Notifications
 * Media handling
-* Search integration
 
+  
 ## 🏗️ Architecture
 
 ```text
